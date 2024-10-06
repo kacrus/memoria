@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "github-pages:deploy": "ng build --configuration production --base-href /memoria/"
   },
   "private": true,
   "dependencies": {
