@@ -101,7 +101,22 @@ export class TestsService {
   }
 
   public deleteTests(ids: string[]): Observable<void> {
+    console.log('deleteTests', ids);
     return new Observable<void>(observer => {
+      this.getDb().subscribe({
+        next: (db: IDBDatabase) => {
+          let transaction: IDBTransaction = db.transaction('tests', 'readwrite');
+          let store: IDBObjectStore = transaction.objectStore('tests');
+          ids.forEach(id => {
+            store.delete(id);
+          });
+          observer.next();
+          observer.complete();
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
     });
   }
 

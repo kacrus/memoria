@@ -129,7 +129,6 @@ export class ListTestsPageComponent {
     }
 
     event.stopPropagation();
-
     if (!confirm(`Are you sure you want to delete test "${item.name}"?`)) {
       return;
     }
