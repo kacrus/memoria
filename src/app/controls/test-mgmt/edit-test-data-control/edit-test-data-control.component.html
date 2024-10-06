@@ -1,0 +1,124 @@
+<div class="data-entry-container" id="data-entry">
+    <div class="data-entry-header">
+
+        <div class="data-entry-page-header">
+
+            <button mat-mini-fab color="accent" (click)="backClick()" title="Back">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+
+            <h2>{{ headerText }}</h2>
+
+            <button mat-mini-fab color="primary" (click)="saveClick()" [disabled]="!canSave()" title="Save">
+                <mat-icon>save</mat-icon>
+            </button>
+
+        </div>
+
+
+        <table class="table table-borderless table-sm mt-2">
+            <tbody>
+                <tr>
+                    <td>
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Name</mat-label>
+                            <input matInput placeholder="Name" [(ngModel)]="test.name" required>
+                        </mat-form-field>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Groups</mat-label>
+                            <input matInput placeholder="Groups" [(ngModel)]="groupsString">
+                            <mat-hint align="start">Use / as a separator</mat-hint>
+                        </mat-form-field>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>Special characters</mat-label>
+                            <input matInput placeholder="Special characters" [(ngModel)]="specialCharsString">
+                            <mat-hint align="start">Use / as a separator</mat-hint>
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <table class="table view-table  mt-2">
+        <thead>
+            <tr>
+                <th scope="col" class="text-center"></th>
+                <th scope="col" class="text-center"></th>
+                <th scope="col" class="text-center"></th>
+                <th scope="col"></th>
+                <th scope="col" class="text-center">
+                    <button mat-icon-button color="primary" (click)="addQuestion()" title="Add Question" tabindex="-1">
+                        <mat-icon>add</mat-icon>
+                    </button>
+            </tr>
+        </thead>
+        <tbody id="questionsContainer">
+            <ng-container *ngFor="let question of test.questions; let i = index">
+
+                <!-- Question row -->
+                <tr class="question-row">
+                    <td class="text-center" [attr.rowspan]="question.answers.length">{{ i + 1}}</td>
+                    <td [attr.rowspan]="question.answers.length">
+                        <mat-form-field class="w-100 small" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Question</mat-label>
+                            <input matInput placeholder="Question" [(ngModel)]="question.text" required>
+                        </mat-form-field>
+                    </td>
+                    <td [class.no-bottom-border]="question.answers.length > 1">
+                        <mat-form-field class="w-100 small" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Answer</mat-label>
+                            <input matInput placeholder="Answer" [(ngModel)]="question.answers[0]" required>
+                        </mat-form-field>
+                    </td>
+                    <td class="fit-content" [class.no-bottom-border]="question.answers.length > 1">
+                        <button mat-icon-button color="warn" tabindex="-1" [disabled]="question.answers.length == 1"
+                            (click)="removeAnswer(i, 0)" title="Delete answer">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                    <td [attr.rowspan]="question.answers.length" class="fit-content">
+                        <button mat-icon-button color="primary" tabindex="-1" (click)="addAnswer(i)" title="Add answer">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" tabindex="-1" [disabled]="test.questions.length <= 1"
+                            (click)="removeQuestion(i)" title="Delete question">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+
+                <!-- Answer rows (if more than 1) -->
+                <tr class="question-row"
+                    *ngFor="let e of [].constructor(question.answers.length - 1); let answerIdx = index ">
+                    <td class="no-top-border" [class.no-bottom-border]="answerIdx !== question.answers.length - 2" >
+                        <mat-form-field class="w-100 small" appearance="outline" subscriptSizing="dynamic">
+                            <mat-label>Answer</mat-label>
+                            <input matInput placeholder="Answer" [(ngModel)]="question.answers[answerIdx + 1]" required>
+                        </mat-form-field>
+                    </td>
+                    <td class="fit-content" class="no-top-border" [class.no-bottom-border]="answerIdx !== question.answers.length - 2" >
+                        <button mat-icon-button color="warn" (click)="removeAnswer(i, answerIdx + 1)"
+                            title="Delete answer">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+
+            </ng-container>
+
+        </tbody>
+    </table>
+</div>
