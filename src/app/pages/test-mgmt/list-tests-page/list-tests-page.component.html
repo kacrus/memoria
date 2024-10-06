@@ -1,0 +1,78 @@
+<div class="list-container">
+    <div class="text-center" *ngIf="!currentHierarchyItem">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+
+    <ng-container *ngIf="currentHierarchyItem">
+        <mat-card>
+            <mat-card-content>
+                <mat-icon class="vertical-align-middle" color="primary">folder</mat-icon>
+                <ng-container *ngFor="let parent of currentHierarchyItem.getAllParents()">
+                    <span (click)="onParentSetClick(parent)" class="fst-italic fw-light align-middle">
+                        {{parent.name}}
+                    </span>
+                    <span>
+                        <mat-icon class="vertical-align-middle" color="primary">chevron_right</mat-icon>
+                    </span>
+                </ng-container>
+                <span class="align-middle">
+                    {{ currentHierarchyItem.name }}
+                </span>
+            </mat-card-content>
+        </mat-card>
+
+        <div class="">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th class="text-end">
+                            <button mat-icon-button color="primary" (click)="onAddClick()" title="Create new test">
+                                <mat-icon>add</mat-icon>
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- test set row -->
+                    <tr *ngFor="let item of currentHierarchyItem.getByType(HierarchyItemType.TestsSet)"
+                        (click)="onTestSetClick(item);">
+                        <td class="fit-content no-right-border vertical-align-middle">
+                            <mat-icon class="vertical-align-middle" color="primary">folder</mat-icon>
+                        </td>
+                        <td class="no-left-border vertical-align-middle no-left-padding">{{ item.name }}</td>
+                        <td class="fit-content text-end">
+                            <button mat-icon-button color="warn" title="Delete folder"
+                                (click)="onTestSetDeleteClick(item, $event)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- test row -->
+                    <tr *ngFor="let item of currentHierarchyItem.getByType(HierarchyItemType.Test)"
+                        (click)="onTestClick(item);">
+                        <td class="fit-content no-right-border vertical-align-middle">
+                            <mat-icon class="vertical-align-middle" color="primary">quiz</mat-icon>
+                        </td>
+                        <td class="no-left-border vertical-align-middle no-left-padding">{{ item.name }}</td>
+                        <td class="fit-content">
+                            <button mat-icon-button color="primary" title="Edit test"
+                                (click)="onTestEditClick(item.id, $event)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button color="warn" title="Delete test"
+                                (click)="onTestDeleteClick(item, $event)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
+</div>

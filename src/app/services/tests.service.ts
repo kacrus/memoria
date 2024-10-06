@@ -78,6 +78,33 @@ export class TestsService {
     });
   }
 
+  public getTests(): Observable<Test[]> {
+    return new Observable<Test[]>(observer => {
+      this.getDb().subscribe({
+        next: (db: IDBDatabase) => {
+          let transaction: IDBTransaction = db.transaction('tests', 'readonly');
+          let store: IDBObjectStore = transaction.objectStore('tests');
+          let request: IDBRequest = store.getAll();
+          request.onsuccess = (event: Event) => {
+            observer.next(request.result);
+            observer.complete();
+          };
+          request.onerror = (event: Event) => {
+            observer.error(request.error);
+          };
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
+    });
+  }
+
+  public deleteTests(ids: string[]): Observable<void> {
+    return new Observable<void>(observer => {
+    });
+  }
+
   private getDb(): Observable<IDBDatabase> {
     let request: IDBOpenDBRequest = indexedDB.open(TestsService.DB_NAME, TestsService.DB_VERSION);
     request.onupgradeneeded = (event: any) => {

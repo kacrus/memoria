@@ -1,0 +1,32 @@
+.list-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.icon {
+  color: #003366;
+}
+
+.fit-content {
+  white-space: nowrap;
+  width: 1%;
+}
+
+.no-left-border {
+  border-left: none;
+}
+
+.no-right-border {
+  border-right: none;
+}
+
+.vertical-align-middle {
+  vertical-align: middle;
+}
+
+.no-left-padding {
+  padding-left: 0;
+}
