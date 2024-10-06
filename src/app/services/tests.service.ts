@@ -34,6 +34,50 @@ export class TestsService {
     });
   }
 
+  public updateTest(test: Test): Observable<boolean> {
+    return new Observable<boolean>(observer => {
+      this.getDb().subscribe({
+        next: (db: IDBDatabase) => {
+          let transaction: IDBTransaction = db.transaction('tests', 'readwrite');
+          let store: IDBObjectStore = transaction.objectStore('tests');
+          let request: IDBRequest = store.put(test);
+          request.onsuccess = (event: Event) => {
+            observer.next(true);
+            observer.complete();
+          };
+          request.onerror = (event: Event) => {
+            observer.error(request.error);
+          };
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
+    });
+  }
+
+  public getTest(id: string): Observable<Test | null> {
+    return new Observable<Test | null>(observer => {
+      this.getDb().subscribe({
+        next: (db: IDBDatabase) => {
+          let transaction: IDBTransaction = db.transaction('tests', 'readonly');
+          let store: IDBObjectStore = transaction.objectStore('tests');
+          let request: IDBRequest = store.get(id);
+          request.onsuccess = (event: Event) => {
+            observer.next(request.result);
+            observer.complete();
+          };
+          request.onerror = (event: Event) => {
+            observer.error(request.error);
+          };
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
+    });
+  }
+
   private getDb(): Observable<IDBDatabase> {
     let request: IDBOpenDBRequest = indexedDB.open(TestsService.DB_NAME, TestsService.DB_VERSION);
     request.onupgradeneeded = (event: any) => {

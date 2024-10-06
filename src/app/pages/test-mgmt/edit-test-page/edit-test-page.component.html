@@ -1,0 +1,12 @@
+<ng-container *ngIf="!test">
+    <div class="text-center mt-5">
+        <div class="spinner-border text-secondary" role="status">
+          <span class="sr-only"></span>
+        </div>
+      </div>
+</ng-container>
+
+
+<ng-container *ngIf="test">
+    <app-edit-test-data-control [test]="test!" headerText="Edit Test" (onTestSaved)="onTestSaved($event)"></app-edit-test-data-control>
+</ng-container>
