@@ -1,0 +1,55 @@
+<ng-container *ngIf="!testSession">
+    <div class="text-center mt-5">
+        <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="testSession">
+
+    <mat-card appearance="raised" class="card">
+        <mat-card-header class="header-center">
+            <mat-card-title>{{ testSession.testName }}</mat-card-title>
+            <mat-card-subtitle>{{ testSession.testGroupsString }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions>
+            <app-test-session-answers-control [answerResults]="testSession.answerResults"
+                class="w-100"></app-test-session-answers-control>
+        </mat-card-actions>
+        <mat-card-content>
+            <mat-divider></mat-divider>
+
+            <div class="quiz-prompt text-center">
+                <strong>{{ testSession.currentQuestion.text }}</strong>
+            </div>
+
+            <mat-form-field class="w-100" appearance="outline"
+                [class.correct-answer]="testSession.currentAnswerResult === AnswerResult.Correct"
+                [class.almost-correct-answer]="testSession.currentAnswerResult === AnswerResult.AlmostCorrect"
+                [class.incorrect-answer]="testSession.currentAnswerResult === AnswerResult.Incorrect">
+                <mat-label>Answer</mat-label>
+                <input matInput placeholder="Question" [(ngModel)]="currentAnswerValue" (keydown.enter)="checkAnswer()"
+                    placeholder="Answer">
+
+                <mat-hint class="hint"
+                    [class.correct-hint]="testSession.currentAnswerResult === AnswerResult.Correct"
+                    [class.almost-correct-hint]="testSession.currentAnswerResult === AnswerResult.AlmostCorrect"
+                    [class.incorrect-hint]="testSession.currentAnswerResult === AnswerResult.Incorrect">
+
+                    <span *ngIf="testSession.currentAnswerResult">
+                        {{ testSession.currentQuestion.answers.join(', ') }}
+                    </span>
+
+                </mat-hint>
+            </mat-form-field>
+
+            <div class="text-end mt-2">
+                <button *ngIf="nextOperation == NextOperation.ShowResult" mat-flat-button color="primary" (click)="checkAnswer()">Check</button>
+                <button *ngIf="nextOperation != NextOperation.ShowResult" mat-flat-button color="primary" (click)="checkAnswer()">Next</button>
+            </div>
+
+        </mat-card-content>
+    </mat-card>
+
+</ng-container>

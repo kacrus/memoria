@@ -1,0 +1,10 @@
+<table class="table">
+    <tr>
+        <ng-container *ngFor="let answerResult of answerResults">
+            <td *ngIf="answerResult === AnswerResult.NotAnswered" class="bg-secondary answer-cell"></td>
+            <td *ngIf="answerResult === AnswerResult.Correct" class="bg-success answer-cell"></td>
+            <td *ngIf="answerResult === AnswerResult.Incorrect" class="bg-danger answer-cell"></td>
+            <td *ngIf="answerResult === AnswerResult.AlmostCorrect" class="bg-warning  answer-cell"></td>
+        </ng-container>
+    </tr>
+</table>

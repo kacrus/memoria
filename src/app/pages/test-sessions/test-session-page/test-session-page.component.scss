@@ -1,0 +1,166 @@
+.quiz-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 3rem;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.quiz-header h2 {
+    font-size: 2rem;
+    color: #003366;
+}
+
+
+
+.quiz-input {
+    font-size: 1.25rem;
+    padding: 10px;
+    border-radius: 5px;
+    //border: 2px solid #007bff;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.feedback {
+    font-size: 1rem;
+    color: #28a745;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.quiz-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-skip {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-submit {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.fit-content {
+    white-space: nowrap;
+    width: 1%;
+}
+
+// new
+.card {
+    width: 750px;
+    margin: 2rem auto;
+    padding: 0.5rem 2rem;
+}
+
+.header-center {
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.quiz-prompt {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+::ng-deep .correct-answer {
+    // focus
+    --mdc-outlined-text-field-focus-outline-color: #198754;
+    --mdc-outlined-text-field-focus-label-text-color: #198754;
+    --mdc-outlined-text-field-focus-outline-width: 2px;
+
+    // hover
+    --mdc-outlined-text-field-hover-outline-color: #198754;
+    --mdc-outlined-text-field-hover-label-text-color: #198754;
+    --mdc-outlined-text-field-hover-outline-width: 2px;
+
+    // normal
+    --mdc-outlined-text-field-outline-color: #198754;
+    --mdc-outlined-text-field-label-text-color: #198754;
+    --mdc-outlined-text-field-outline-width: 2px;
+
+    // disabled
+    --mdc-outlined-text-field-disabled-outline-color: #198754;
+    --mdc-outlined-text-field-disabled-label-text-color: #198754;
+    --mdc-outlined-text-field-disabled-outline-width: 2px;
+
+    //hint
+    --mdc-outlined-text-field-helper-text-color: #198754;
+
+
+}
+
+::ng-deep .almost-correct-answer {
+    // focus
+    --mdc-outlined-text-field-focus-outline-color: #ffc107;
+    --mdc-outlined-text-field-focus-label-text-color: #ffc107;
+    --mdc-outlined-text-field-focus-outline-width: 2px;
+
+    // hover
+    --mdc-outlined-text-field-hover-outline-color: #ffc107;
+    --mdc-outlined-text-field-hover-label-text-color: #ffc107;
+    --mdc-outlined-text-field-hover-outline-width: 2px;
+
+    // normal
+    --mdc-outlined-text-field-outline-color: #ffc107;
+    --mdc-outlined-text-field-label-text-color: #ffc107;
+    --mdc-outlined-text-field-outline-width: 2px;
+
+    // disabled
+    --mdc-outlined-text-field-disabled-outline-color: #ffc107;
+    --mdc-outlined-text-field-disabled-label-text-color: #ffc107;
+    --mdc-outlined-text-field-disabled-outline-width: 2px;
+}
+
+::ng-deep .incorrect-answer {
+    // focus
+    --mdc-outlined-text-field-focus-outline-color: #dc3545;
+    --mdc-outlined-text-field-focus-label-text-color: #dc3545;
+    --mdc-outlined-text-field-focus-outline-width: 2px;
+
+    // hover
+    --mdc-outlined-text-field-hover-outline-color: #dc3545;
+    --mdc-outlined-text-field-hover-label-text-color: #dc3545red;
+    --mdc-outlined-text-field-hover-outline-width: 2px;
+
+    // normal
+    --mdc-outlined-text-field-outline-color: #dc3545;
+    --mdc-outlined-text-field-label-text-color: #dc3545;
+    --mdc-outlined-text-field-outline-width: 2px;
+
+    // disabled
+    --mdc-outlined-text-field-disabled-outline-color: #dc3545;
+    --mdc-outlined-text-field-disabled-label-text-color: #dc3545;
+    --mdc-outlined-text-field-disabled-outline-width: 2px;
+}
+
+.hint {
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    padding-left: 0!important;
+}
+
+.correct-hint {
+    color: #198754;
+}
+
+.almost-correct-hint {
+    color: #ffc107;
+}
+
+.incorrect-hint {
+    color: #dc3545;
+}
