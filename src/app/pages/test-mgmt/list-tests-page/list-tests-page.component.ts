@@ -79,7 +79,7 @@ export class ListTestsPageComponent {
 
   protected onTestClick(item: HierarchyItem) {
     if (item.type === HierarchyItemType.Test) {
-      this.router.navigate(['test', item.id, 'session']);
+      this.router.navigate(['test', item.id, 'session-settings']);
     }
   }
 

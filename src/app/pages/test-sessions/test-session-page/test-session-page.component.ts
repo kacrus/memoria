@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute } from '@angular/router';
 import { AnswerResult } from '../../../models/answer-result.model';
 import { AnswerValidator } from '../../../services/answer-validation/answer-validator';
-import { AnswerValidationSettings, AnswerValidatorFactory } from '../../../services/answer-validation/answer-validator.factory';
+import { AnswerValidatorFactory } from '../../../services/answer-validation/answer-validator.factory';
 import { CommonModule } from '@angular/common';
 import { TestSessionAnswersControlComponent } from '../../../controls/test-sessions/test-session-answers-control/test-session-answers-control.component';
 import { FormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button';
+import { AnswerValidationSettings } from '../../../models/test-session-settings.model';
 
 @Component({
   selector: 'app-test-session-page',
@@ -32,15 +33,20 @@ export class TestSessionPageComponent {
   protected NextOperation = NextOperation;
   protected AnswerResult = AnswerResult;
 
+  private shuffleQuestions: boolean = false;
+
   constructor(
     private readonly testsService: TestsService,
     private readonly toastrService: ToastrService,
     private readonly activatedRoute: ActivatedRoute,
     answerValidatorFactory: AnswerValidatorFactory
   ) {
+    this.shuffleQuestions = activatedRoute.snapshot.queryParamMap.get('shuffleQuestions') === "true";
+    let caseSensitive = activatedRoute.snapshot.queryParamMap.get('caseSensitive') === "true";
+    let maxErrors = parseInt(activatedRoute.snapshot.queryParamMap.get('maxErrors') || '0');
     let settings = new AnswerValidationSettings();
-    settings.caseSensitive = false;
-    settings.maxErrors = 2;
+    settings.caseSensitive = caseSensitive;
+    settings.maxErrors = maxErrors;
     this.answerValidator = answerValidatorFactory.createValidator(settings);
   }
 
@@ -59,6 +65,9 @@ export class TestSessionPageComponent {
         }
 
         this.testSession = new TestSession(test);
+        if (this.shuffleQuestions) {
+          this.testSession.shuffleQuestions();
+        }
       },
       error: (error) => {
         console.error('Failed to load test', error);

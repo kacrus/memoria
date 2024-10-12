@@ -4,11 +4,7 @@ import { ExactMatchValidator } from "./validators/exact-match.validator";
 import { CompositeValidator } from "./validators/composite.validator";
 import { CaseInsensitiveValidator } from "./validators/case-insensitive.validator";
 import { LevenshteinDistanceValidator } from "./validators/levenshtein-distance.validator";
-
-export class AnswerValidationSettings {
-    public caseSensitive: boolean = true;
-    public maxErrors: number = 0;
-}
+import { AnswerValidationSettings } from "../../models/test-session-settings.model";
 
 @Injectable({
     providedIn: 'root'
