@@ -1,4 +1,4 @@
-export class TestSesssionSettings {
+export class TestSessionSettings {
     public shuffleQuestions: boolean = false;
     public answerValidation: AnswerValidationSettings = new AnswerValidationSettings();
 }

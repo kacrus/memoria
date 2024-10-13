@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { TestsService } from '../../../services/tests.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { TestSesssionSettings as TestSessionSettings } from '../../../models/test-session-settings.model';
+import { TestSessionSettings as TestSessionSettings } from '../../../models/test-session-settings.model';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';

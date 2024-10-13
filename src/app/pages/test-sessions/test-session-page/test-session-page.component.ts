@@ -3,7 +3,7 @@ import { Test } from '../../../models/test.model';
 import { TestSession } from '../../../models/test-session.model';
 import { TestsService } from '../../../services/tests.service';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AnswerResult } from '../../../models/answer-result.model';
 import { AnswerValidator } from '../../../services/answer-validation/answer-validator';
 import { AnswerValidatorFactory } from '../../../services/answer-validation/answer-validator.factory';
@@ -15,7 +15,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input'
 import { MatButtonModule } from '@angular/material/button';
-import { AnswerValidationSettings } from '../../../models/test-session-settings.model';
+import { TestSessionSettings } from '../../../models/test-session-settings.model';
+import { TestSessionResultsService } from '../../../services/test-session-results.service';
 
 @Component({
   selector: 'app-test-session-page',
@@ -33,21 +34,20 @@ export class TestSessionPageComponent {
   protected NextOperation = NextOperation;
   protected AnswerResult = AnswerResult;
 
-  private shuffleQuestions: boolean = false;
+  private readonly testSessionSettings: TestSessionSettings;
+
 
   constructor(
     private readonly testsService: TestsService,
     private readonly toastrService: ToastrService,
     private readonly activatedRoute: ActivatedRoute,
+    private readonly testSessionResultsService: TestSessionResultsService,
+    private readonly router: Router,
     answerValidatorFactory: AnswerValidatorFactory
   ) {
-    this.shuffleQuestions = activatedRoute.snapshot.queryParamMap.get('shuffleQuestions') === "true";
-    let caseSensitive = activatedRoute.snapshot.queryParamMap.get('caseSensitive') === "true";
-    let maxErrors = parseInt(activatedRoute.snapshot.queryParamMap.get('maxErrors') || '0');
-    let settings = new AnswerValidationSettings();
-    settings.caseSensitive = caseSensitive;
-    settings.maxErrors = maxErrors;
-    this.answerValidator = answerValidatorFactory.createValidator(settings);
+    this.testSessionSettings = this.getTestSessionSettings();
+
+    this.answerValidator = answerValidatorFactory.createValidator(this.testSessionSettings.answerValidation);
   }
 
   ngOnInit() {
@@ -64,8 +64,8 @@ export class TestSessionPageComponent {
           return;
         }
 
-        this.testSession = new TestSession(test);
-        if (this.shuffleQuestions) {
+        this.testSession = new TestSession(test, this.testSessionSettings);
+        if (this.testSessionSettings.shuffleQuestions) {
           this.testSession.shuffleQuestions();
         }
       },
@@ -89,13 +89,39 @@ export class TestSessionPageComponent {
 
       this.nextOperation = NextOperation.ShowNextQuestion;
     } else {
-      this.testSession.moveToNextQuestion();
-      this.currentAnswerValue = '';
-      this.nextOperation = NextOperation.ShowResult;
+      if (this.testSession.canMoveToNextQuestion()) {
+        this.testSession.moveToNextQuestion();
+        this.currentAnswerValue = '';
+        this.nextOperation = NextOperation.ShowResult;
+      } else {
+        this.testSessionResultsService
+          .save(this.testSession)
+          .subscribe({
+            next: () => {
+              this.router.navigate(['test-session-results']);
+            },
+            error: (error: any) => {
+              console.error('Failed to save test session result', error);
+              this.toastrService.error('Failed to save test session result');
+            }
+          });
+      }
     }
   }
-}
 
+  protected getTestSessionSettings(): TestSessionSettings {
+    let shuffleQuestions = this.activatedRoute.snapshot.queryParamMap.get('shuffleQuestions') === "true";
+    let caseSensitive = this.activatedRoute.snapshot.queryParamMap.get('caseSensitive') === "true";
+    let maxErrors = parseInt(this.activatedRoute.snapshot.queryParamMap.get('maxErrors') || '0');
+
+    let settings = new TestSessionSettings();
+    settings.shuffleQuestions = shuffleQuestions;
+    settings.answerValidation.caseSensitive = caseSensitive;
+    settings.answerValidation.maxErrors = maxErrors;
+
+    return settings;
+  }
+}
 
 enum NextOperation {
   ShowResult,

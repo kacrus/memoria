@@ -1,0 +1,42 @@
+.card {
+    width: 850px;
+    margin: 2rem auto;
+    padding: 0.5rem;
+}
+
+.header-center {
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.correct {
+    color: #198754;
+}
+
+.incorrect {
+    color: #dc3545;
+}
+
+.almost-correct {
+    color: #ffc107;
+}
+
+.fit-content {
+    white-space: nowrap;
+    width: 1%;
+}
+
+.data-entry-container {
+    max-width: 750px;
+    margin: 2rem auto;
+    padding: 2rem;
+   // background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.data-entry-header {
+    margin-bottom: 1.5rem;
+}

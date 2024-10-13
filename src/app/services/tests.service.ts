@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Test } from '../models/test.model';
 import { Observable } from 'rxjs';
+import { DbService } from './db.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TestsService {
-  static readonly DB_NAME = 'memoria';
-  static readonly DB_VERSION = 1;
+
 
   constructor(
+    private dbService: DbService
   ) { }
 
   public createTest(test: Test): Observable<void> {
     return new Observable<void>(observer => {
-      this.getDb().subscribe({
+      this.dbService.getDb().subscribe({
         next: (db: IDBDatabase) => {
           let transaction: IDBTransaction = db.transaction('tests', 'readwrite');
           let store: IDBObjectStore = transaction.objectStore('tests');
@@ -36,7 +37,7 @@ export class TestsService {
 
   public updateTest(test: Test): Observable<boolean> {
     return new Observable<boolean>(observer => {
-      this.getDb().subscribe({
+      this.dbService.getDb().subscribe({
         next: (db: IDBDatabase) => {
           let transaction: IDBTransaction = db.transaction('tests', 'readwrite');
           let store: IDBObjectStore = transaction.objectStore('tests');
@@ -58,7 +59,7 @@ export class TestsService {
 
   public getTest(id: string): Observable<Test | null> {
     return new Observable<Test | null>(observer => {
-      this.getDb().subscribe({
+      this.dbService.getDb().subscribe({
         next: (db: IDBDatabase) => {
           let transaction: IDBTransaction = db.transaction('tests', 'readonly');
           let store: IDBObjectStore = transaction.objectStore('tests');
@@ -80,7 +81,7 @@ export class TestsService {
 
   public getTests(): Observable<Test[]> {
     return new Observable<Test[]>(observer => {
-      this.getDb().subscribe({
+      this.dbService.getDb().subscribe({
         next: (db: IDBDatabase) => {
           let transaction: IDBTransaction = db.transaction('tests', 'readonly');
           let store: IDBObjectStore = transaction.objectStore('tests');
@@ -101,9 +102,8 @@ export class TestsService {
   }
 
   public deleteTests(ids: string[]): Observable<void> {
-    console.log('deleteTests', ids);
     return new Observable<void>(observer => {
-      this.getDb().subscribe({
+      this.dbService.getDb().subscribe({
         next: (db: IDBDatabase) => {
           let transaction: IDBTransaction = db.transaction('tests', 'readwrite');
           let store: IDBObjectStore = transaction.objectStore('tests');
@@ -117,26 +117,6 @@ export class TestsService {
           observer.error(error);
         }
       });
-    });
-  }
-
-  private getDb(): Observable<IDBDatabase> {
-    let request: IDBOpenDBRequest = indexedDB.open(TestsService.DB_NAME, TestsService.DB_VERSION);
-    request.onupgradeneeded = (event: any) => {
-      console.log('onupgradeneeded', event);
-      let db: IDBDatabase = event.target.result;
-      db.createObjectStore('tests', { keyPath: 'id', autoIncrement: false });
-    };
-
-    return new Observable<IDBDatabase>(observer => {
-      request.onsuccess = (event: Event) => {
-        observer.next(request.result);
-        observer.complete();
-      };
-
-      request.onerror = (event: Event) => {
-        observer.error(request.error);
-      };
     });
   }
 }
